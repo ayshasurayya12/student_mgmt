@@ -1,0 +1,107 @@
+{% extends 'students/base.html' %}
+{% block title %}{{ course.title }} — Learnthru{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .back-link{display:inline-flex;align-items:center;gap:7px;color:#6B7280;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:18px;transition:color 0.2s;}
+  .back-link:hover{color:#6C63FF;}
+  .grid{display:grid;grid-template-columns:1fr 340px;gap:20px;animation:fadeUp 0.5s ease;}
+  .main-col{display:flex;flex-direction:column;gap:18px;}
+  .side-col{display:flex;flex-direction:column;gap:14px;}
+  .hero{background:linear-gradient(135deg,#6C63FF,#4A42D4);border-radius:16px;padding:28px;color:white;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 30%,rgba(255,101,132,0.2),transparent 55%);}
+  .hero-icon{position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:70px;opacity:0.15;}
+  .hero h1{font-size:22px;font-weight:700;margin-bottom:10px;position:relative;z-index:1;line-height:1.3;}
+  .hero-meta{display:flex;gap:16px;flex-wrap:wrap;position:relative;z-index:1;}
+  .hm{display:flex;align-items:center;gap:6px;font-size:12px;opacity:0.82;}
+  .card{background:white;border-radius:14px;border:1px solid #E5E7F0;overflow:hidden;box-shadow:0 2px 8px rgba(108,99,255,0.05);}
+  .ch{padding:14px 20px;border-bottom:1px solid #E5E7F0;display:flex;align-items:center;gap:8px;}
+  .ch-ic{width:28px;height:28px;border-radius:8px;background:rgba(108,99,255,0.1);display:flex;align-items:center;justify-content:center;color:#6C63FF;font-size:12px;}
+  .ch h3{font-size:14px;font-weight:700;}
+  .cb{padding:20px;}
+  .desc{font-size:13px;color:#4B5563;line-height:1.7;}
+  .enroll-card{background:white;border-radius:14px;border:1.5px solid #E5E7F0;overflow:hidden;box-shadow:0 4px 16px rgba(108,99,255,0.08);}
+  .ec-price{padding:22px;text-align:center;border-bottom:1px solid #F3F4F6;}
+  .ec-enrolled{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px;}
+  .ec-enrolled i{font-size:32px;color:#43D9AD;}
+  .ec-enrolled p{font-size:13px;color:#065f46;font-weight:600;}
+  .ec-price .big{font-size:32px;font-weight:800;color:#1A1A2E;display:block;margin-bottom:4px;}
+  .ec-price .sub{font-size:12px;color:#9CA3AF;}
+  .ec-body{padding:18px;}
+  .feat{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F3F4F6;font-size:13px;}
+  .feat:last-child{border-bottom:none;}
+  .feat i{width:20px;color:#6C63FF;font-size:12px;}
+  .btn-enroll{display:block;width:100%;padding:13px;text-align:center;background:linear-gradient(135deg,#6C63FF,#8B85FF);color:white;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(108,99,255,0.28);transition:all 0.2s;margin-top:14px;}
+  .btn-enroll:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,99,255,0.38);}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ig{background:#F7F8FF;border-radius:10px;padding:13px;}
+  .ig-lbl{font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+  .ig-val{font-size:14px;font-weight:700;color:#1A1A2E;}
+  @media(max-width:960px){.grid{grid-template-columns:1fr;}}
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'course_list' %}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Courses</a>
+
+<div class="grid">
+  <div class="main-col">
+    <div class="hero">
+      <div class="hero-icon">📘</div>
+      <h1>{{ course.title }}</h1>
+      <div class="hero-meta">
+        <span class="hm"><i class="fas fa-users"></i> {{ course.enrollment_set.count }} students</span>
+        <span class="hm"><i class="fas fa-calendar"></i> Added {{ course.created_at|date:"d M Y" }}</span>
+        <span class="hm"><i class="fas fa-refresh"></i> Updated {{ course.updated_at|date:"d M Y" }}</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div class="ch-ic"><i class="fas fa-align-left"></i></div><h3>About this Course</h3></div>
+      <div class="cb">
+        <p class="desc">{{ course.description|default:"No description has been provided for this course." }}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div class="ch-ic"><i class="fas fa-chart-bar"></i></div><h3>Course Info</h3></div>
+      <div class="cb">
+        <div class="info-grid">
+          <div class="ig"><div class="ig-lbl">Students Enrolled</div><div class="ig-val">{{ course.enrollment_set.count }}</div></div>
+          <div class="ig"><div class="ig-lbl">Date Added</div><div class="ig-val">{{ course.created_at|date:"d M Y" }}</div></div>
+          <div class="ig"><div class="ig-lbl">Last Updated</div><div class="ig-val">{{ course.updated_at|date:"d M Y" }}</div></div>
+          <div class="ig"><div class="ig-lbl">Status</div><div class="ig-val" style="color:#43D9AD;">Active</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-col">
+    <div class="enroll-card">
+      {% if is_enrolled %}
+      <div class="ec-enrolled">
+        <i class="fas fa-check-circle"></i>
+        <p>You are enrolled in this course!</p>
+        <span style="font-size:12px;color:#9CA3AF;">Keep up the great work.</span>
+      </div>
+      {% else %}
+      <div class="ec-price">
+        <span class="big">Free</span>
+        <span class="sub">Enroll and start learning today</span>
+      </div>
+      <div class="ec-body">
+        <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
+        <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
+        <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
+        <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
+        <form method="post" action="{% url 'enroll_course' course.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-enroll"><i class="fas fa-graduation-cap"></i> Enroll Now</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

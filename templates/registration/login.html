@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign In — Learnthru</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:#F2F4F8;}
+
+    /* LEFT */
+    .left{background:#1E2235;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 50px;position:relative;overflow:hidden;}
+    .left-glow{position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(91,103,245,0.25) 0%,transparent 70%);top:-80px;left:-80px;pointer-events:none;}
+    .left-glow2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,93,138,0.18) 0%,transparent 70%);bottom:-60px;right:-60px;pointer-events:none;}
+    .lc{position:relative;z-index:1;text-align:center;color:white;}
+    .brand{display:flex;align-items:center;gap:11px;justify-content:center;margin-bottom:52px;}
+    .bm{width:38px;height:38px;background:linear-gradient(135deg,#5B67F5,#E85D8A);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+    .brand-name{font-size:22px;font-weight:700;}
+    /* Book illustration */
+    .book-scene{width:200px;height:160px;margin:0 auto 36px;position:relative;display:flex;align-items:flex-end;justify-content:center;gap:8px;}
+    .bk{border-radius:5px 9px 9px 5px;position:relative;box-shadow:4px 4px 12px rgba(0,0,0,0.25);}
+    .bk::after{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:rgba(0,0,0,0.15);border-radius:5px 0 0 5px;}
+    .bk-a{width:52px;height:68px;background:linear-gradient(160deg,#F4A261,#E76F51);animation:float 3.2s ease-in-out infinite;}
+    .bk-b{width:52px;height:82px;background:linear-gradient(160deg,#74B9FF,#4C63D2);animation:float 3.2s ease-in-out infinite 0.5s;}
+    .bk-b::before{content:'';position:absolute;top:-7px;left:9px;right:4px;height:7px;background:#D4D7F0;border-radius:2px 2px 0 0;box-shadow:0 -2px 0 #E8EAF5;}
+    .bk-c{width:52px;height:60px;background:linear-gradient(160deg,#B2BEFF,#667EEA);animation:float 3.2s ease-in-out infinite 1s;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+    .lc h2{font-family:'DM Serif Display',serif;font-size:28px;line-height:1.3;margin-bottom:10px;}
+    .lc p{font-size:13px;opacity:0.5;line-height:1.6;max-width:280px;}
+    .dots{display:flex;justify-content:center;gap:7px;margin-top:28px;}
+    .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.2);}
+    .dot.on{width:22px;border-radius:4px;background:white;}
+
+    /* RIGHT */
+    .right{display:flex;align-items:center;justify-content:center;padding:40px;}
+    .auth-box{width:100%;max-width:400px;}
+    .auth-box h1{font-size:26px;font-weight:700;color:#1A1D2E;margin-bottom:6px;letter-spacing:-0.4px;}
+    .auth-box h1 span{color:#5B67F5;}
+    .auth-box>p{font-size:13px;color:#6B7280;margin-bottom:28px;}
+    .form-card{background:white;border-radius:20px;padding:28px;box-shadow:0 8px 36px rgba(0,0,0,0.08);border:1px solid #EAECF0;}
+    .err-box{background:#FEE2E2;border:1px solid #FCA5A5;border-radius:10px;padding:11px 14px;margin-bottom:15px;font-size:12px;color:#991B1B;display:flex;align-items:flex-start;gap:8px;}
+    .form-group{margin-bottom:15px;}
+    .form-label{display:block;font-size:11px;font-weight:700;color:#1A1D2E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;}
+    .input-wrap{position:relative;}
+    .ii{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#9CA3AF;font-size:12px;}
+    .form-control{width:100%;padding:11px 14px 11px 38px;background:#F8F9FF;border:1.5px solid #EAECF0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:#1A1D2E;outline:none;transition:all 0.2s;}
+    .form-control:focus{border-color:#5B67F5;background:white;box-shadow:0 0 0 3px rgba(91,103,245,0.08);}
+    .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:13px;}
+    .form-opts{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:13px;}
+    .rem{display:flex;align-items:center;gap:7px;color:#6B7280;cursor:pointer;}
+    .rem input{accent-color:#5B67F5;}
+    .forgot{color:#5B67F5;text-decoration:none;font-weight:600;}.forgot:hover{text-decoration:underline;}
+    .btn-login{width:100%;padding:12px;background:#5B67F5;color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(91,103,245,0.28);}
+    .btn-login:hover{background:#4C63D2;transform:translateY(-1px);}
+    .divider{display:flex;align-items:center;gap:11px;margin:18px 0;font-size:12px;color:#9CA3AF;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#EAECF0;}
+    .auth-footer{text-align:center;font-size:13px;color:#6B7280;}
+    .auth-footer a{color:#5B67F5;font-weight:600;text-decoration:none;}.auth-footer a:hover{text-decoration:underline;}
+    .msg-wrap{position:fixed;top:16px;right:16px;z-index:999;display:flex;flex-direction:column;gap:7px;}
+    .msg{padding:11px 14px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.1);animation:mIn 0.3s ease;min-width:250px;}
+    .msg-success{background:#D1FAE5;color:#065f46;}.msg-error{background:#FEE2E2;color:#991B1B;}.msg-info{background:#DBEAFE;color:#1E40AF;}
+    @keyframes mIn{from{opacity:0;transform:translateX(16px);}to{opacity:1;transform:translateX(0);}}
+    @media(max-width:800px){body{grid-template-columns:1fr;}.left{display:none;}}
+  </style>
+</head>
+<body>
+{% if messages %}
+<div class="msg-wrap">{% for message in messages %}<div class="msg msg-{{ message.tags }}">{% if message.tags == 'success' %}<i class="fas fa-check-circle"></i>{% elif message.tags == 'error' %}<i class="fas fa-times-circle"></i>{% else %}<i class="fas fa-info-circle"></i>{% endif %}{{ message }}</div>{% endfor %}</div>
+{% endif %}
+
+<div class="left">
+  <div class="left-glow"></div><div class="left-glow2"></div>
+  <div class="lc">
+    <div class="brand"><div class="bm"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">Learnthru</span></div>
+    <div class="book-scene"><div class="bk bk-a"></div><div class="bk bk-b"></div><div class="bk bk-c"></div></div>
+    <h2>Learn without<br>limits.</h2>
+    <p>Your all-in-one platform to manage courses, students, and learning journeys.</p>
+    <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="auth-box">
+    <h1>Welcome <span>back!</span></h1>
+    <p>Sign in to access your dashboard.</p>
+    <div class="form-card">
+      {% if messages %}{% for message in messages %}{% if message.tags == 'error' %}<div class="err-box"><i class="fas fa-exclamation-circle"></i>{{ message }}</div>{% endif %}{% endfor %}{% endif %}
+      <form method="post" action="{% url 'login' %}">{% csrf_token %}
+        <div class="form-group"><label class="form-label">Username</label><div class="input-wrap"><i class="fas fa-user ii"></i><input type="text" name="username" class="form-control" placeholder="Enter your username" required></div></div>
+        <div class="form-group"><label class="form-label">Password</label><div class="input-wrap"><i class="fas fa-lock ii"></i><input type="password" name="password" id="pw" class="form-control" placeholder="Enter your password" required><button type="button" class="eye" onclick="togglePw()"><i class="fas fa-eye" id="eyeI"></i></button></div></div>
+        <div class="form-opts"><label class="rem"><input type="checkbox" name="remember"> Remember me</label><a href="{% url 'password_reset' %}" class="forgot">Forgot password?</a></div>
+        <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+      </form>
+      <div class="divider">or</div>
+      <div class="auth-footer">New student? <a href="{% url 'register' %}">Create account →</a></div>
+    </div>
+  </div>
+</div>
+<script>
+  function togglePw(){const i=document.getElementById('pw'),e=document.getElementById('eyeI');i.type=i.type==='password'?'text':'password';e.className=i.type==='password'?'fas fa-eye':'fas fa-eye-slash';}
+  setTimeout(()=>document.querySelectorAll('.msg').forEach(e=>{e.style.transition='opacity 0.4s';e.style.opacity='0';setTimeout(()=>e.remove(),400);}),4500);
+</script>
+</body>
+</html>

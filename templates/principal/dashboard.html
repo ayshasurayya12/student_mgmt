@@ -1,0 +1,122 @@
+{% extends 'principal/base.html' %}
+{% block title %}Dashboard — Principal{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  /* WELCOME */
+  .welcome-banner { background: white; border-radius: 18px; padding: 26px 28px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.05); overflow: hidden; position: relative; animation: fadeUp 0.4s ease; }
+  .wb-text h2 { font-size: 20px; font-weight: 700; margin-bottom: 5px; }
+  .wb-text p { font-size: 13px; color: #6B7280; margin-bottom: 16px; }
+  .wb-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+  .wa-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .wa-p { background: #5B67F5; color: white; box-shadow: 0 3px 10px rgba(91,103,245,0.25); }
+  .wa-p:hover { background: #4C63D2; }
+  .wa-s { background: #FDE8F1; color: #E85D8A; }
+  .wa-s:hover { background: #FBCFE8; }
+  .wb-illustration { display: flex; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .book { border-radius: 5px 8px 8px 5px; box-shadow: 3px 3px 8px rgba(0,0,0,0.12); position: relative; }
+  .book::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: rgba(0,0,0,0.12); border-radius: 5px 0 0 5px; }
+  .bk-c { width: 44px; height: 58px; background: linear-gradient(160deg, #F4A261, #E76F51); }
+  .bk-b { width: 44px; height: 70px; background: linear-gradient(160deg, #74B9FF, #4C63D2); }
+  .bk-b::before { content: ''; position: absolute; top: -6px; left: 8px; right: 4px; height: 6px; background: #E8EAF5; border-radius: 2px 2px 0 0; box-shadow: 0 -2px 0 #D4D7F0; }
+  .bk-d { width: 44px; height: 50px; background: linear-gradient(160deg, #2D3561, #1A1D2E); }
+
+  /* STATS */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+  .stat-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 14px; transition: all 0.2s; animation: fadeUp 0.4s ease both; }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.09); }
+  .stat-card:nth-child(1) { animation-delay: .04s; } .stat-card:nth-child(2) { animation-delay: .08s; } .stat-card:nth-child(3) { animation-delay: .12s; }
+  .st-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .si1 { background: #EEF0FE; } .si2 { background: #FDE8F1; } .si3 { background: #D1FAE5; }
+  .st-val { font-size: 28px; font-weight: 800; color: #1A1D2E; letter-spacing: -1px; line-height: 1; }
+  .st-lbl { font-size: 12px; color: #6B7280; margin-top: 3px; }
+
+  /* BOTTOM GRID */
+  .bottom-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+  .data-card { background: white; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; animation: fadeUp 0.4s 0.14s ease both; }
+  .dc-head { padding: 16px 20px; border-bottom: 1px solid #F5F6FA; display: flex; align-items: center; justify-content: space-between; }
+  .dc-head h3 { font-size: 14px; font-weight: 700; }
+  .st-row { display: flex; align-items: center; padding: 11px 20px; border-bottom: 1px solid #F5F6FA; gap: 11px; transition: background 0.15s; }
+  .st-row:last-child { border-bottom: none; }
+  .st-row:hover { background: #FAFBFF; }
+  .st-av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #8B85FF); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; }
+  .st-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .st-dept { font-size: 11px; color: #9CA3AF; }
+  .cr-row { display: flex; align-items: center; padding: 11px 20px; border-bottom: 1px solid #F5F6FA; gap: 11px; transition: background 0.15s; }
+  .cr-row:last-child { border-bottom: none; }
+  .cr-row:hover { background: #FAFBFF; }
+  .cr-ic { width: 32px; height: 32px; border-radius: 9px; background: #EEF0FE; display: flex; align-items: center; justify-content: center; color: #5B67F5; font-size: 12px; flex-shrink: 0; }
+  .cr-t { font-size: 13px; font-weight: 600; flex: 1; }
+  .cr-n { font-size: 11px; color: #9CA3AF; }
+  @media (max-width: 1000px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .bottom-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+  <div class="wb-text">
+    <h2>Good to see you{% if principal %}, {{ principal.designation }}{% endif %}! 👋</h2>
+    <p>Here's an overview of Learnthru activity today.</p>
+    <div class="wb-actions">
+      <a href="{% url 'principal_student_create' %}" class="wa-btn wa-p"><i class="fas fa-user-plus"></i> Add Student</a>
+      <a href="{% url 'principal_course_create' %}" class="wa-btn wa-s"><i class="fas fa-plus"></i> New Course</a>
+    </div>
+  </div>
+  <div class="wb-illustration">
+    <div class="book bk-c"></div>
+    <div class="book bk-b"></div>
+    <div class="book bk-d"></div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="st-icon si1">👨‍🎓</div>
+    <div><div class="st-val">{{ total_students }}</div><div class="st-lbl">Total Students</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="st-icon si2">📚</div>
+    <div><div class="st-val">{{ total_courses }}</div><div class="st-lbl">Total Courses</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="st-icon si3">📋</div>
+    <div><div class="st-val">{{ total_enrollments }}</div><div class="st-lbl">Enrollments</div></div>
+  </div>
+</div>
+
+<div class="bottom-grid">
+  <div class="data-card">
+    <div class="dc-head"><h3>Recent Students</h3><a href="{% url 'principal_student_list' %}" class="view-all">View All <i class="fas fa-chevron-right" style="font-size:10px;"></i></a></div>
+    {% for student in recent_students %}
+    <div class="st-row">
+      <div class="st-av">{{ student.user.first_name|first|upper }}{{ student.user.last_name|first|upper|default:student.user.username|first|upper }}</div>
+      <div style="flex:1;"><div class="st-name">{{ student.user.get_full_name|default:student.user.username }}</div><div class="st-dept">{{ student.department|default:"No dept." }}{% if student.roll_number %} · {{ student.roll_number }}{% endif %}</div></div>
+      <div style="display:flex;gap:5px;">
+        <a href="{% url 'principal_student_detail' student.pk %}" class="icon-btn ib-view"><i class="fas fa-eye"></i></a>
+        <a href="{% url 'principal_student_edit' student.pk %}" class="icon-btn ib-edit"><i class="fas fa-edit"></i></a>
+      </div>
+    </div>
+    {% empty %}
+    <div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px;">No students yet. <a href="{% url 'principal_student_create' %}" style="color:#5B67F5;font-weight:600;">Add one →</a></div>
+    {% endfor %}
+  </div>
+
+  <div class="data-card">
+    <div class="dc-head"><h3>Recent Courses</h3><a href="{% url 'principal_course_list' %}" class="view-all">View All <i class="fas fa-chevron-right" style="font-size:10px;"></i></a></div>
+    {% for course in recent_courses %}
+    <div class="cr-row">
+      <div class="cr-ic"><i class="fas fa-book"></i></div>
+      <div style="flex:1;"><div class="cr-t">{{ course.title|truncatechars:30 }}</div><div class="cr-n">{{ course.enrollment_set.count }} enrolled</div></div>
+      <div style="display:flex;gap:5px;">
+        <a href="{% url 'principal_course_edit' course.pk %}" class="icon-btn ib-edit"><i class="fas fa-edit"></i></a>
+        <form method="post" action="{% url 'principal_course_delete' course.pk %}" style="display:inline;" onsubmit="return confirm('Delete?')">{% csrf_token %}<button type="submit" class="icon-btn ib-del"><i class="fas fa-trash"></i></button></form>
+      </div>
+    </div>
+    {% empty %}
+    <div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px;">No courses yet. <a href="{% url 'principal_course_create' %}" style="color:#5B67F5;font-weight:600;">Create one →</a></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>{% block title %}Learnthru — Principal{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F2F4F8;
+      --sidebar-bg: #1E2235;
+      --card: #FFFFFF;
+      --primary: #5B67F5;
+      --primary-light: #EEF0FE;
+      --accent: #F4A261;
+      --pink: #E85D8A;
+      --indigo: #4C63D2;
+      --text: #1A1D2E;
+      --text2: #6B7280;
+      --text3: #9CA3AF;
+      --border: #EAECF0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    .layout { display: grid; grid-template-columns: 228px 1fr; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 28px 0;
+      display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 0 22px 28px; text-decoration: none; }
+    .logo-mark { width: 34px; height: 34px; background: linear-gradient(135deg, #5B67F5, #E85D8A); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: white; flex-shrink: 0; }
+    .logo-name { font-size: 17px; font-weight: 700; color: white; }
+    .logo-sub { font-size: 10px; color: rgba(255,255,255,0.35); }
+    .sidebar-nav { flex: 1; padding: 0 10px; }
+    .nav-section { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 1.2px; padding: 10px 12px 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-radius: var(--radius-sm);
+      text-decoration: none; color: rgba(255,255,255,0.5);
+      font-size: 13.5px; font-weight: 500; margin-bottom: 2px;
+      transition: all 0.18s; position: relative;
+    }
+    .nav-item i { width: 17px; font-size: 13px; text-align: center; }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .nav-item.active { background: rgba(91,103,245,0.22); color: #A5A0FF; font-weight: 600; }
+    .nav-item.active::before { content: ''; position: absolute; left: 0; top: 22%; bottom: 22%; width: 3px; background: #5B67F5; border-radius: 0 3px 3px 0; }
+    .sidebar-bottom { padding: 16px 14px 0; border-top: 1px solid rgba(255,255,255,0.07); margin-top: 10px; }
+    .p-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+    .p-av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #E85D8A); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; flex-shrink: 0; }
+    .p-name { font-size: 12px; font-weight: 600; color: white; }
+    .p-role { font-size: 10px; color: rgba(255,255,255,0.35); }
+
+    /* MAIN */
+    .main { overflow-y: auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px 0; margin-bottom: 20px; }
+    .topbar-left { display: flex; flex-direction: column; }
+    .topbar-left h1 { font-size: 20px; font-weight: 700; }
+    .topbar-left span { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .tb-date { font-size: 13px; color: var(--text2); font-weight: 500; }
+    .tb-btn { width: 34px; height: 34px; border-radius: 50%; background: white; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 13px; text-decoration: none; transition: all 0.18s; }
+    .tb-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .content { padding: 0 28px 32px; }
+
+    /* MESSAGES */
+    .msg-wrap { position: fixed; top: 16px; right: 16px; z-index: 999; display: flex; flex-direction: column; gap: 7px; min-width: 270px; }
+    .msg { padding: 11px 14px; border-radius: 11px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); animation: msgIn 0.3s ease; }
+    @keyframes msgIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
+    .msg-success { background: #D1FAE5; color: #065f46; }
+    .msg-error { background: #FEE2E2; color: #991B1B; }
+    .msg-info { background: #DBEAFE; color: #1E40AF; }
+    .msg-close { margin-left: auto; background: none; border: none; cursor: pointer; opacity: 0.6; font-size: 14px; color: inherit; }
+
+    /* SHARED */
+    .card { background: var(--card); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-header h3 { font-size: 15px; font-weight: 700; }
+    .view-all { font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .view-all:hover { text-decoration: underline; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-control { width: 100%; padding: 10px 14px; background: #F8F9FF; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: all 0.2s; }
+    .form-control:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(91,103,245,0.08); }
+    textarea.form-control { min-height: 90px; resize: vertical; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 20px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 3px 10px rgba(91,103,245,0.25); }
+    .btn-primary:hover { background: var(--indigo); transform: translateY(-1px); }
+    .btn-danger { background: #FEE2E2; color: #991B1B; }
+    .btn-danger:hover { background: #FCA5A5; }
+    .btn-ghost { background: white; color: var(--text2); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { padding: 11px 14px; text-align: left; font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; background: #F8F9FF; border-bottom: 1px solid var(--border); }
+    td { padding: 13px 14px; border-bottom: 1px solid #F5F6FA; color: var(--text); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #FAFBFF; }
+    .icon-btn { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; text-decoration: none; border: none; cursor: pointer; transition: all 0.18s; }
+    .ib-edit { background: #EEF0FE; color: #5B67F5; }
+    .ib-edit:hover { background: #5B67F5; color: white; }
+    .ib-view { background: #E0F2FE; color: #0369A1; }
+    .ib-view:hover { background: #0369A1; color: white; }
+    .ib-del { background: #FEE2E2; color: #DC2626; }
+    .ib-del:hover { background: #DC2626; color: white; }
+    .action-btns { display: flex; gap: 5px; }
+    .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-blue { background: #EEF0FE; color: #5B67F5; }
+    .badge-green { background: #D1FAE5; color: #065f46; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+{% if messages %}
+<div class="msg-wrap">
+  {% for message in messages %}
+  <div class="msg msg-{{ message.tags }}">
+    {% if message.tags == 'success' %}<i class="fas fa-check-circle"></i>{% endif %}
+    {% if message.tags == 'error' %}<i class="fas fa-times-circle"></i>{% endif %}
+    {% if message.tags == 'info' %}<i class="fas fa-info-circle"></i>{% endif %}
+    {{ message }}
+    <button class="msg-close" onclick="this.parentElement.remove()">&times;</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="layout">
+  <aside class="sidebar">
+    <a href="{% url 'principal_dashboard' %}" class="sidebar-logo">
+      <div class="logo-mark"><i class="fas fa-graduation-cap"></i></div>
+      <div><div class="logo-name">Learnthru</div><div class="logo-sub">Principal Portal</div></div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overview</div>
+      <a href="{% url 'principal_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'principal_dashboard' %}active{% endif %}"><i class="fas fa-th-large"></i> Dashboard</a>
+      <div class="nav-section">Management</div>
+      <a href="{% url 'principal_student_list' %}" class="nav-item {% if 'student' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-user-graduate"></i> Students</a>
+      <a href="{% url 'principal_course_list' %}" class="nav-item {% if 'course' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-book-open"></i> Courses</a>
+      <div class="nav-section">Account</div>
+      <a href="{% url 'principal_profile' %}" class="nav-item {% if request.resolver_match.url_name == 'principal_profile' %}active{% endif %}"><i class="fas fa-user-tie"></i> My Profile</a>
+      <a href="{% url 'logout' %}" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="p-card">
+        <div class="p-av">{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper|default:request.user.username|first|upper }}</div>
+        <div><div class="p-name">{{ request.user.get_full_name|default:request.user.username|truncatechars:15 }}</div><div class="p-role">Principal</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        <span id="tbDate"></span>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'principal_profile' %}" class="tb-btn" title="Profile"><i class="fas fa-user-tie"></i></a>
+        <a href="{% url 'logout' %}" class="tb-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </div>
+    <div class="content">{% block content %}{% endblock %}</div>
+  </div>
+</div>
+
+<script>
+  const d = new Date();
+  document.getElementById('tbDate').textContent = d.toLocaleDateString('en-US', {day:'numeric',month:'long',year:'numeric',weekday:'long'});
+  setTimeout(() => document.querySelectorAll('.msg').forEach(e => { e.style.transition = 'opacity 0.4s'; e.style.opacity = '0'; setTimeout(() => e.remove(), 400); }), 4500);
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

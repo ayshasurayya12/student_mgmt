@@ -1,0 +1,93 @@
+{% extends 'principal/base.html' %}
+{% block title %}{{ student.user.get_full_name|default:student.user.username }} — Principal{% endblock %}
+{% block page_title %}Student Detail{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .back{display:inline-flex;align-items:center;gap:7px;color:#6B7280;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:18px;}
+  .back:hover{color:#6C63FF;}
+  .pg{display:grid;grid-template-columns:300px 1fr;gap:18px;animation:fadeUp 0.4s ease;}
+  .left-col{display:flex;flex-direction:column;gap:14px;}
+  .right-col{display:flex;flex-direction:column;gap:14px;}
+  .id-card{background:linear-gradient(135deg,#1A1A2E,#16213E);border-radius:16px;padding:24px;color:white;text-align:center;position:relative;overflow:hidden;}
+  .id-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(108,99,255,0.2),transparent 55%);}
+  .id-av{width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,0.2);background:linear-gradient(135deg,#6C63FF,#FF6584);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;margin:0 auto 12px;position:relative;z-index:1;overflow:hidden;}
+  .id-av img{width:100%;height:100%;object-fit:cover;}
+  .id-name{font-size:16px;font-weight:700;position:relative;z-index:1;margin-bottom:3px;}
+  .id-username{font-size:12px;opacity:0.5;position:relative;z-index:1;margin-bottom:14px;}
+  .id-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(108,99,255,0.25);color:#A5A0FF;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;position:relative;z-index:1;}
+  .data-card{background:white;border-radius:14px;border:1px solid #E5E7F0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+  .ch{padding:13px 18px;border-bottom:1px solid #E5E7F0;display:flex;align-items:center;gap:8px;}
+  .ch-ic{width:26px;height:26px;border-radius:7px;background:rgba(26,26,46,0.06);display:flex;align-items:center;justify-content:center;color:#1A1A2E;font-size:11px;}
+  .ch h3{font-size:13px;font-weight:700;}
+  .ir{display:flex;align-items:center;padding:11px 18px;border-bottom:1px solid #F3F4F6;gap:10px;}
+  .ir:last-child{border-bottom:none;}
+  .ir-lbl{font-size:11px;color:#9CA3AF;width:110px;flex-shrink:0;}
+  .ir-val{font-size:13px;font-weight:600;}
+  .enroll-row{display:flex;align-items:center;padding:11px 18px;border-bottom:1px solid #F3F4F6;gap:10px;}
+  .enroll-row:last-child{border-bottom:none;}
+  .er-ic{width:30px;height:30px;border-radius:8px;background:rgba(108,99,255,0.09);display:flex;align-items:center;justify-content:center;color:#6C63FF;font-size:11px;flex-shrink:0;}
+  .er-t{font-size:13px;font-weight:600;flex:1;}
+  .er-d{font-size:11px;color:#9CA3AF;}
+  .btn-row{display:flex;gap:9px;padding:16px 18px;border-top:1px solid #E5E7F0;}
+  @media(max-width:880px){.pg{grid-template-columns:1fr;}}
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'principal_student_list' %}" class="back"><i class="fas fa-arrow-left"></i> Back to Students</a>
+
+<div class="pg">
+  <div class="left-col">
+    <div class="id-card">
+      <div class="id-av">
+        {% if student.profile_picture %}<img src="{{ student.profile_picture.url }}" alt="">
+        {% else %}{{ student.user.first_name|first|upper }}{{ student.user.last_name|first|upper|default:student.user.username|first|upper }}{% endif %}
+      </div>
+      <div class="id-name">{{ student.user.get_full_name|default:student.user.username }}</div>
+      <div class="id-username">@{{ student.user.username }}</div>
+      <span class="id-badge"><i class="fas fa-user-graduate"></i> Student</span>
+    </div>
+
+    <div class="data-card">
+      <div class="ch"><div class="ch-ic"><i class="fas fa-user"></i></div><h3>Account Info</h3></div>
+      <div class="ir"><span class="ir-lbl">Username</span><span class="ir-val">{{ student.user.username }}</span></div>
+      <div class="ir"><span class="ir-lbl">Email</span><span class="ir-val">{{ student.user.email|default:"—" }}</span></div>
+      <div class="ir"><span class="ir-lbl">Joined</span><span class="ir-val">{{ student.user.date_joined|date:"d M Y" }}</span></div>
+    </div>
+
+    <div class="btn-row" style="background:white;border-radius:14px;border:1px solid #E5E7F0;">
+      <a href="{% url 'principal_student_edit' student.pk %}" class="btn btn-primary" style="flex:1;justify-content:center;"><i class="fas fa-edit"></i> Edit</a>
+      <form method="post" action="{% url 'principal_student_delete' student.pk %}" onsubmit="return confirm('Delete this student?')">
+        {% csrf_token %}<button type="submit" class="btn btn-danger" style="flex:1;justify-content:center;"><i class="fas fa-trash"></i> Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="right-col">
+    <div class="data-card">
+      <div class="ch"><div class="ch-ic"><i class="fas fa-id-card"></i></div><h3>Student Details</h3></div>
+      <div class="ir"><span class="ir-lbl">Roll Number</span><span class="ir-val">{{ student.roll_number|default:"—" }}</span></div>
+      <div class="ir"><span class="ir-lbl">Year of Admission</span><span class="ir-val">{{ student.year_of_admission|default:"—" }}</span></div>
+      <div class="ir"><span class="ir-lbl">Total Courses</span><span class="ir-val"><span class="badge badge-purple">{{ enrollments.count }} enrolled</span></span></div>
+    </div>
+
+    <div class="data-card">
+      <div class="ch"><div class="ch-ic"><i class="fas fa-book-open"></i></div><h3>Enrolled Courses ({{ enrollments.count }})</h3></div>
+      {% for enrollment in enrollments %}
+      <div class="enroll-row">
+        <div class="er-ic"><i class="fas fa-book"></i></div>
+        <div>
+          <div class="er-t">{{ enrollment.course.title }}</div>
+          <div class="er-d">Enrolled {{ enrollment.enrolled_at|date:"d M Y" }}</div>
+        </div>
+        <span class="badge badge-green">Active</span>
+      </div>
+      {% empty %}
+      <div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px;">Not enrolled in any courses yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

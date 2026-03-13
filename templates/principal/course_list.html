@@ -1,0 +1,137 @@
+{% extends 'principal/base.html' %}
+{% block title %}Courses — Principal{% endblock %}
+{% block page_title %}Courses{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;animation:fadeUp 0.4s ease;}
+  .sf-row{display:flex;gap:10px;margin-bottom:14px;animation:fadeUp 0.4s .04s ease both;}
+  .sf-wrap{flex:1;position:relative;}
+  .sf-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#9CA3AF;font-size:13px;}
+  .sf-wrap input{width:100%;padding:10px 14px 10px 38px;background:white;border:1.5px solid #EAECF0;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:all 0.2s;}
+  .sf-wrap input:focus{border-color:#5B67F5;box-shadow:0 0 0 3px rgba(91,103,245,0.08);}
+  .s-btn{padding:10px 20px;background:#5B67F5;color:white;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+
+  /* Department filter tabs */
+  .dept-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;animation:fadeUp 0.4s .06s ease both;}
+  .dept-tab{padding:7px 16px;border-radius:50px;font-size:12px;font-weight:600;text-decoration:none;border:1.5px solid #EAECF0;background:white;color:#6B7280;transition:all 0.18s;}
+  .dept-tab:hover{border-color:#5B67F5;color:#5B67F5;}
+  .dept-tab.active{background:#5B67F5;color:white;border-color:#5B67F5;}
+
+  /* Course grid */
+  .cg{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;animation:fadeUp 0.4s .08s ease both;}
+  .cc{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05);transition:all 0.22s;display:flex;flex-direction:column;}
+  .cc:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,0.09);}
+  .cc-top{height:110px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;}
+  .ct1{background:linear-gradient(135deg,#EEF0FE,#DFE2FD);}
+  .ct2{background:linear-gradient(135deg,#FDE8F1,#FBCFE8);}
+  .ct3{background:linear-gradient(135deg,#E0F2FE,#BAE6FD);}
+  .ct4{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);}
+  .ct5{background:linear-gradient(135deg,#FEF3C7,#FDE68A);}
+  .ct6{background:linear-gradient(135deg,#EDE9FE,#DDD6FE);}
+  .cc-ec{position:absolute;top:10px;right:10px;background:#EEF0FE;color:#5B67F5;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+  .cc-dept{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.08);color:#374151;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+  .cc-body{padding:16px;flex:1;display:flex;flex-direction:column;}
+  .cc-title{font-size:14px;font-weight:700;color:#1A1D2E;margin-bottom:6px;line-height:1.3;}
+  .cc-desc{font-size:12px;color:#6B7280;line-height:1.5;flex:1;margin-bottom:12px;}
+  .cc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #F5F6FA;}
+  .cc-date{font-size:11px;color:#9CA3AF;}
+  .cc-acts{display:flex;gap:5px;}
+  .icon-btn{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;text-decoration:none;border:none;cursor:pointer;transition:all 0.18s;}
+  .ib-view{background:#E0F2FE;color:#0369A1;}.ib-view:hover{background:#0369A1;color:white;}
+  .ib-edit{background:#EEF0FE;color:#5B67F5;}.ib-edit:hover{background:#5B67F5;color:white;}
+  .ib-del{background:#FEE2E2;color:#DC2626;}.ib-del:hover{background:#DC2626;color:white;}
+  .empty{grid-column:1/-1;text-align:center;padding:46px 20px;background:white;border-radius:16px;border:2px dashed #EAECF0;color:#9CA3AF;}
+  .empty i{font-size:36px;display:block;margin-bottom:12px;opacity:0.12;}
+  .pager{display:flex;justify-content:center;gap:6px;margin-top:16px;}
+  .pager a{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;text-decoration:none;color:#6B7280;background:white;border:1.5px solid #EAECF0;transition:all 0.2s;}
+  .pager a:hover,.pager a.on{background:#5B67F5;color:white;border-color:#5B67F5;}
+  @media(max-width:1000px){.cg{grid-template-columns:repeat(2,1fr);}}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Top toolbar -->
+<div class="toolbar">
+  <div>
+    <h2 style="font-size:18px;font-weight:700;">All Courses</h2>
+    <p style="font-size:13px;color:#6B7280;margin-top:2px;">{{ courses.paginator.count }} course{{ courses.paginator.count|pluralize }} available</p>
+  </div>
+  <a href="{% url 'principal_course_create' %}" class="btn btn-primary">
+    <i class="fas fa-plus"></i> New Course
+  </a>
+</div>
+
+<!-- Search -->
+<form method="get" class="sf-row">
+  <div class="sf-wrap">
+    <i class="fas fa-search"></i>
+    <input type="text" name="q" placeholder="Search courses..." value="{{ request.GET.q|default:'' }}">
+    {% if selected_dept %}<input type="hidden" name="dept" value="{{ selected_dept }}">{% endif %}
+  </div>
+  <button type="submit" class="s-btn">Search</button>
+  {% if request.GET.q or selected_dept %}
+  <a href="{% url 'principal_course_list' %}" class="btn btn-ghost">Clear</a>
+  {% endif %}
+</form>
+
+<!-- Department Filter Tabs -->
+<div class="dept-tabs">
+  <a href="{% url 'principal_course_list' %}{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}"
+     class="dept-tab {% if not selected_dept %}active{% endif %}">All</a>
+  {% for code, name in departments %}
+  <a href="?dept={{ code }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+     class="dept-tab {% if selected_dept == code %}active{% endif %}">{{ name }}</a>
+  {% endfor %}
+</div>
+
+<!-- Courses Grid -->
+<div class="cg">
+  {% for course in courses %}
+  <div class="cc">
+    <div class="cc-top {% cycle 'ct1' 'ct2' 'ct3' 'ct4' 'ct5' 'ct6' %}">
+      {% cycle '📘' '📕' '📗' '📙' '📓' '📔' %}
+      {% if course.department %}
+      <span class="cc-dept">{{ course.get_department_display }}</span>
+      {% endif %}
+      <span class="cc-ec">{{ course.enrollment_set.count }} enrolled</span>
+    </div>
+    <div class="cc-body">
+      <div class="cc-title">{{ course.title }}</div>
+      <div class="cc-desc">{{ course.description|truncatechars:75|default:"No description." }}</div>
+      <div class="cc-foot">
+        <span class="cc-date">{{ course.created_at|date:"d M Y" }}</span>
+        <div class="cc-acts">
+          <a href="{% url 'principal_course_detail' course.pk %}" class="icon-btn ib-view"><i class="fas fa-eye"></i></a>
+          <a href="{% url 'principal_course_edit' course.pk %}" class="icon-btn ib-edit"><i class="fas fa-edit"></i></a>
+          <form method="post" action="{% url 'principal_course_delete' course.pk %}" style="display:inline;" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="icon-btn ib-del"><i class="fas fa-trash"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty">
+    <i class="fas fa-book-open"></i>
+    <p style="font-size:14px;margin-bottom:8px;">No courses found{% if request.GET.q %} for "{{ request.GET.q }}"{% endif %}.</p>
+    <a href="{% url 'principal_course_create' %}" style="color:#5B67F5;font-weight:600;">Create your first →</a>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if courses.has_other_pages %}
+<div class="pager">
+  {% if courses.has_previous %}<a href="?page={{ courses.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}"><i class="fas fa-chevron-left"></i></a>{% endif %}
+  {% for num in courses.paginator.page_range %}
+  <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}" class="{% if courses.number == num %}on{% endif %}">{{ num }}</a>
+  {% endfor %}
+  {% if courses.has_next %}<a href="?page={{ courses.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}"><i class="fas fa-chevron-right"></i></a>{% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

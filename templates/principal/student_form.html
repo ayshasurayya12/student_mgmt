@@ -1,0 +1,55 @@
+{% extends 'principal/base.html' %}
+{% block title %}{{ action }} Student — Principal{% endblock %}
+{% block page_title %}{{ action }} Student{% endblock %}
+{% block extra_css %}
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .back{display:inline-flex;align-items:center;gap:7px;color:#6B7280;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:18px;}
+  .back:hover{color:#5B67F5;}
+  .wrap{max-width:700px;animation:fadeUp 0.4s ease;}
+  .form-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+  .fc-head{padding:20px 24px;border-bottom:1px solid #F5F6FA;background:#F8F9FF;display:flex;align-items:center;gap:12px;}
+  .fc-icon{width:36px;height:36px;border-radius:10px;background:#EEF0FE;display:flex;align-items:center;justify-content:center;color:#5B67F5;font-size:15px;}
+  .fc-head h2{font-size:16px;font-weight:700;}
+  .fc-head p{font-size:12px;color:#6B7280;margin-top:1px;}
+  .fc-body{padding:24px;}
+  .sec-lbl{font-size:11px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #F5F6FA;}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
+  .divider{height:1px;background:#F5F6FA;margin:18px 0;}
+  .hint{font-size:11px;color:#9CA3AF;margin-top:4px;}
+  .btn-row{display:flex;gap:10px;margin-top:18px;}
+  .save-btn{display:inline-flex;align-items:center;gap:7px;background:#5B67F5;color:white;padding:11px 24px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 3px 12px rgba(91,103,245,0.25);}
+  .save-btn:hover{background:#4C63D2;transform:translateY(-1px);}
+  .cancel-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-decoration:none;background:#F3F4F6;color:#6B7280;}
+  .cancel-btn:hover{background:#E5E7F0;}
+</style>
+{% endblock %}
+{% block content %}
+<a href="{% url 'principal_student_list' %}" class="back"><i class="fas fa-arrow-left"></i> Back to Students</a>
+<div class="wrap">
+  <div class="form-card">
+    <div class="fc-head"><div class="fc-icon"><i class="fas fa-user-{% if action == 'Edit' %}edit{% else %}plus{% endif %}"></i></div><div><h2>{{ action }} Student</h2><p>{% if action == 'Edit' %}Update the student's information.{% else %}Fill in the details to add a new student.{% endif %}</p></div></div>
+    <div class="fc-body">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="sec-lbl">Account Info</div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" value="{{ student.user.first_name|default:'' }}" placeholder="John"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" value="{{ student.user.last_name|default:'' }}" placeholder="Doe"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Username *</label><input type="text" name="username" class="form-control" value="{{ student.user.username|default:'' }}" {% if action == 'Edit' %}readonly{% else %}required{% endif %} placeholder="johndoe123">{% if action == 'Edit' %}<p class="hint">Username cannot be changed.</p>{% endif %}</div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ student.user.email|default:'' }}" placeholder="john@example.com"></div>
+        {% if action == 'Create' %}<div class="form-group"><label class="form-label">Password</label><input type="text" name="password" class="form-control" placeholder="Default: changeme123"><p class="hint">Leave blank to use default: changeme123</p></div>{% endif %}
+        <div class="divider"></div>
+        <div class="sec-lbl">Student Details</div>
+        <div class="g3">
+          <div class="form-group"><label class="form-label">Roll Number</label><input type="text" name="roll_number" class="form-control" value="{{ student.roll_number|default:'' }}" placeholder="2024CS001"></div>
+          <div class="form-group"><label class="form-label">Year of Admission</label><input type="number" name="year_of_admission" class="form-control" value="{{ student.year_of_admission|default:'' }}" placeholder="2024" min="2000" max="2099"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Profile Picture</label><input type="file" name="profile_picture" class="form-control" accept="image/*"></div>
+        <div class="btn-row"><button type="submit" class="save-btn"><i class="fas fa-save"></i> {{ action }} Student</button><a href="{% url 'principal_student_list' %}" class="cancel-btn"><i class="fas fa-times"></i> Cancel</a></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

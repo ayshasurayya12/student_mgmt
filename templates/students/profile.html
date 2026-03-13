@@ -1,0 +1,87 @@
+{% extends 'students/base.html' %}
+{% block title %}My Profile — Learnthru{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 18px; animation: fadeUp 0.4s ease; }
+  .id-card { background: white; border-radius: 18px; padding: 28px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); text-align: center; }
+  .id-av-wrap { position: relative; display: inline-block; margin-bottom: 14px; }
+  .id-av { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #E85D8A); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: white; margin: 0 auto; overflow: hidden; border: 3px solid #EEF0FE; }
+  .id-av img { width: 100%; height: 100%; object-fit: cover; }
+  .id-name { font-size: 16px; font-weight: 700; color: #1A1D2E; margin-bottom: 3px; }
+  .id-role { display: inline-block; background: #EEF0FE; color: #5B67F5; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 18px; }
+  .id-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F5F6FA; font-size: 13px; }
+  .id-row:last-child { border-bottom: none; }
+  .id-lbl { color: #9CA3AF; font-size: 12px; }
+  .id-val { font-weight: 600; font-size: 13px; }
+  .courses-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 14px; }
+  .ci { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px solid #F5F6FA; }
+  .ci:last-child { border-bottom: none; }
+  .ci-ic { width: 34px; height: 34px; border-radius: 9px; background: #EEF0FE; display: flex; align-items: center; justify-content: center; color: #5B67F5; font-size: 13px; flex-shrink: 0; }
+  .ci-title { font-size: 13px; font-weight: 600; }
+  .ci-date { font-size: 11px; color: #9CA3AF; }
+  .edit-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .ec-title { font-size: 15px; font-weight: 700; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #F5F6FA; }
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  .save-btn { display: inline-flex; align-items: center; gap: 7px; background: #5B67F5; color: white; padding: 11px 24px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 12px rgba(91,103,245,0.26); margin-top: 6px; }
+  .save-btn:hover { background: #4C63D2; transform: translateY(-1px); }
+  @media (max-width: 880px) { .profile-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom:20px;"><h2 style="font-size:20px;font-weight:700;">My Profile</h2><p style="font-size:13px;color:#6B7280;margin-top:3px;">Manage your account details</p></div>
+
+<div class="profile-grid">
+  <div>
+    <div class="id-card">
+      <div class="id-av-wrap">
+        <div class="id-av">
+          {% if student and student.profile_picture %}<img src="{{ student.profile_picture.url }}" alt="">
+          {% else %}{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper|default:request.user.username|first|upper }}{% endif %}
+        </div>
+      </div>
+      <div class="id-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+      <div class="id-role">Student</div>
+      {% if student %}
+      <div class="id-row"><span class="id-lbl">Roll No.</span><span class="id-val">{{ student.roll_number|default:"—" }}</span></div>
+      <div class="id-row"><span class="id-lbl">Year</span><span class="id-val">{{ student.year_of_admission|default:"—" }}</span></div>
+      {% endif %}
+      <div class="id-row"><span class="id-lbl">Email</span><span class="id-val" style="font-size:11px;">{{ request.user.email|default:"—" }}</span></div>
+      <div class="id-row"><span class="id-lbl">Joined</span><span class="id-val">{{ request.user.date_joined|date:"d M Y" }}</span></div>
+      <div class="id-row"><span class="id-lbl">Enrolled</span><span class="id-val">{{ enrolled_count }} course{{ enrolled_count|pluralize }}</span></div>
+    </div>
+    <div class="courses-card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Enrolled Courses</div>
+      {% for enrollment in user_courses %}
+      <div class="ci">
+        <div class="ci-ic"><i class="fas fa-book"></i></div>
+        <div><div class="ci-title">{{ enrollment.course.title|truncatechars:28 }}</div><div class="ci-date">{{ enrollment.enrolled_at|date:"d M Y" }}</div></div>
+      </div>
+      {% empty %}
+      <div style="text-align:center;color:#9CA3AF;font-size:13px;padding:16px 0;">No courses yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="edit-card">
+    <div class="ec-title">Edit Profile</div>
+    <form method="post" enctype="multipart/form-data" action="{% url 'student_profile' %}">
+      {% csrf_token %}
+      <div class="g2">
+        <div class="form-group"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" value="{{ request.user.first_name }}"></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" value="{{ request.user.last_name }}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ request.user.email }}"></div>
+      {% if student %}
+      <div class="form-group"><label class="form-label">Roll Number</label><input type="text" name="roll_number" class="form-control" value="{{ student.roll_number }}"></div>
+      <div class="g2">
+        <div class="form-group"><label class="form-label">Year of Admission</label><input type="number" name="year_of_admission" class="form-control" value="{{ student.year_of_admission }}" min="2000" max="2099"></div>
+      </div>
+      {% endif %}
+      <div class="form-group"><label class="form-label">Profile Picture</label><input type="file" name="profile_picture" class="form-control" accept="image/*"></div>
+      <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Changes</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends 'principal/base.html' %}
+{% block title %}{{ action }} Course — Principal{% endblock %}
+{% block page_title %}{{ action }} Course{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .back{display:inline-flex;align-items:center;gap:7px;color:#6B7280;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:18px;}
+  .back:hover{color:#5B67F5;}
+  .wrap{max-width:640px;animation:fadeUp 0.4s ease;}
+  .form-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+  .fc-head{padding:20px 24px;border-bottom:1px solid #F5F6FA;background:#F8F9FF;display:flex;align-items:center;gap:12px;}
+  .fc-icon{width:34px;height:34px;border-radius:10px;background:#EEF0FE;display:flex;align-items:center;justify-content:center;color:#5B67F5;font-size:15px;}
+  .fc-head h2{font-size:16px;font-weight:700;}
+  .fc-head p{font-size:12px;color:#6B7280;margin-top:1px;}
+  .fc-body{padding:24px;}
+
+  .form-group{margin-bottom:16px;}
+  .form-label{font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
+  .form-control{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #E5E7EB;
+      font-size:14px;
+      font-family:'DM Sans',sans-serif;
+      transition:all 0.2s;
+  }
+  .form-control:focus{
+      outline:none;
+      border-color:#5B67F5;
+      box-shadow:0 0 0 2px rgba(91,103,245,0.1);
+  }
+
+  .preview{background:linear-gradient(135deg,#EEF0FE,#DFE2FD);border-radius:12px;padding:18px;margin-bottom:18px;display:none;}
+  .pv-label{font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+  .pv-title{font-size:15px;font-weight:700;color:#1A1D2E;margin-bottom:4px;}
+  .pv-desc{font-size:12px;color:#4B5563;line-height:1.5;}
+
+  .char-count{font-size:11px;color:#9CA3AF;text-align:right;margin-top:4px;}
+
+  .btn-row{display:flex;gap:10px;margin-top:18px;}
+
+  .save-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      background:#5B67F5;
+      color:white;
+      padding:11px 24px;
+      border-radius:50px;
+      font-family:'DM Sans',sans-serif;
+      font-size:14px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      transition:all 0.2s;
+      box-shadow:0 3px 12px rgba(91,103,245,0.25);
+  }
+  .save-btn:hover{background:#4C63D2;transform:translateY(-1px);}
+
+  .cancel-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:11px 20px;
+      border-radius:50px;
+      font-family:'DM Sans',sans-serif;
+      font-size:14px;
+      font-weight:600;
+      text-decoration:none;
+      background:#F3F4F6;
+      color:#6B7280;
+  }
+  .cancel-btn:hover{background:#E5E7F0;}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'principal_course_list' %}" class="back">
+<i class="fas fa-arrow-left"></i> Back to Courses
+</a>
+
+<div class="wrap">
+  <div class="form-card">
+
+    <div class="fc-head">
+      <div class="fc-icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <div>
+        <h2>{{ action }} Course</h2>
+        <p>
+        {% if action == 'Edit' %}
+        Update this course's information.
+        {% else %}
+        Create a new course for students.
+        {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="fc-body">
+
+      <div class="preview" id="preview">
+        <div class="pv-label">Preview</div>
+        <div class="pv-title" id="pvTitle">Course title</div>
+        <div class="pv-desc" id="pvDesc">Course description...</div>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="form-label">Course Title *</label>
+          <input type="text" name="title" id="titleI" class="form-control"
+          value="{{ course.title|default:'' }}"
+          placeholder="e.g. Introduction to Python" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea name="description" id="descI" class="form-control"
+          placeholder="What will students learn in this course?">{{ course.description|default:'' }}</textarea>
+          <div class="char-count"><span id="cc">0</span> chars</div>
+        </div>
+
+        <!-- Department Dropdown -->
+        <div class="form-group">
+          <label class="form-label">Department</label>
+          <select name="department" class="form-control">
+            <option value="">-- Select Department --</option>
+
+            {% for code, name in departments %}
+            <option value="{{ code }}" {% if course.department == code %}selected{% endif %}>
+              {{ name }}
+            </option>
+            {% endfor %}
+
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="save-btn">
+            <i class="fas fa-save"></i> {{ action }} Course
+          </button>
+
+          <a href="{% url 'principal_course_list' %}" class="cancel-btn">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+const ti = document.getElementById('titleI');
+const di = document.getElementById('descI');
+const pv = document.getElementById('preview');
+const pt = document.getElementById('pvTitle');
+const pd = document.getElementById('pvDesc');
+const cc = document.getElementById('cc');
+
+function upd(){
+  const t = ti.value.trim();
+  const d = di.value.trim();
+
+  cc.textContent = di.value.length;
+
+  if(t || d){
+    pv.style.display = 'block';
+    pt.textContent = t || 'Course title';
+    pd.textContent = d || 'Description...';
+  } else {
+    pv.style.display = 'none';
+  }
+}
+
+ti.addEventListener('input', upd);
+di.addEventListener('input', upd);
+
+cc.textContent = di.value.length;
+
+{% if course %}
+upd();
+{% endif %}
+
+</script>
+{% endblock %}
