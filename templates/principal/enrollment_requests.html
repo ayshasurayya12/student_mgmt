@@ -1,0 +1,184 @@
+{% extends 'principal/base.html' %}
+{% block title %}Enrollment Requests — Learnthru{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .page-hero { background: white; border-radius: 18px; padding: 22px 26px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.05); animation: fadeUp 0.4s ease; }
+  .ph-left h2 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
+  .ph-left p { font-size: 13px; color: #6B7280; }
+  .ph-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #EEF0FE, #E8EAFF); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+
+  .filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .ftab { padding: 7px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1.5px solid #EAECF0; background: white; color: #6B7280; transition: all 0.18s; }
+  .ftab:hover { border-color: #5B67F5; color: #5B67F5; }
+  .ftab.active { background: #5B67F5; color: white; border-color: #5B67F5; }
+  .ftab.pending-tab.active { background: #F59E0B; border-color: #F59E0B; }
+  .ftab.approved-tab.active { background: #10B981; border-color: #10B981; }
+  .ftab.rejected-tab.active { background: #EF4444; border-color: #EF4444; }
+  .badge-count { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #EF4444; color: white; font-size: 10px; font-weight: 700; margin-left: 5px; }
+
+  .requests-table { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); animation: fadeUp 0.4s ease; }
+  .rt-head { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr; gap: 12px; padding: 12px 20px; background: #F8F9FF; border-bottom: 1px solid #EAECF0; font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.4px; }
+  .rt-row { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F5F6FA; align-items: center; transition: background 0.15s; }
+  .rt-row:last-child { border-bottom: none; }
+  .rt-row:hover { background: #FAFBFF; }
+
+  .student-info { display: flex; align-items: center; gap: 10px; }
+  .s-av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #E85D8A); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; flex-shrink: 0; overflow: hidden; }
+  .s-av img { width: 100%; height: 100%; object-fit: cover; }
+  .s-name { font-size: 13px; font-weight: 600; color: #1A1D2E; }
+  .s-roll { font-size: 11px; color: #9CA3AF; }
+  .course-name { font-size: 13px; font-weight: 600; color: #1A1D2E; }
+  .course-dept { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .dept-tag { display: inline-block; background: #EEF0FE; color: #5B67F5; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .date-text { font-size: 12px; color: #6B7280; }
+
+  .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-pending { background: #FEF3C7; color: #92400E; }
+  .status-approved { background: #D1FAE5; color: #065f46; }
+  .status-rejected { background: #FEE2E2; color: #991B1B; }
+
+  .action-btns { display: flex; gap: 6px; align-items: center; }
+  .approve-btn { padding: 6px 14px; background: #D1FAE5; color: #065f46; border: 1.5px solid #A7F3D0; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .approve-btn:hover { background: #10B981; color: white; border-color: #10B981; }
+  .reject-btn { padding: 6px 14px; background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .reject-btn:hover { background: #EF4444; color: white; border-color: #EF4444; }
+  .done-text { font-size: 12px; color: #9CA3AF; font-style: italic; }
+
+  .empty-state { text-align: center; padding: 48px 20px; color: #9CA3AF; }
+  .empty-state i { font-size: 42px; display: block; margin-bottom: 14px; opacity: 0.12; }
+
+  /* Reject modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 18px; padding: 28px; width: 420px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal p { font-size: 13px; color: #6B7280; margin-bottom: 16px; }
+  .modal textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #EAECF0; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; resize: vertical; min-height: 80px; transition: border 0.2s; }
+  .modal textarea:focus { border-color: #5B67F5; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
+  .modal-cancel { padding: 9px 20px; background: #F3F4F6; color: #6B7280; border: none; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .modal-reject { padding: 9px 20px; background: #EF4444; color: white; border: none; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="ph-left">
+    <h2>Enrollment Requests</h2>
+    <p>Review and manage student enrollment requests</p>
+  </div>
+  <div class="ph-icon">📋</div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="filter-tabs">
+  <a href="?status=all" class="ftab {% if status_filter == 'all' %}active{% endif %}">All</a>
+  <a href="?status=pending" class="ftab pending-tab {% if status_filter == 'pending' %}active{% endif %}">
+    Pending {% if pending_count %}<span class="badge-count">{{ pending_count }}</span>{% endif %}
+  </a>
+  <a href="?status=approved" class="ftab approved-tab {% if status_filter == 'approved' %}active{% endif %}">Approved</a>
+  <a href="?status=rejected" class="ftab rejected-tab {% if status_filter == 'rejected' %}active{% endif %}">Rejected</a>
+</div>
+
+<!-- Table -->
+<div class="requests-table">
+  <div class="rt-head">
+    <div>Student</div>
+    <div>Course</div>
+    <div>Department</div>
+    <div>Requested</div>
+    <div>Action</div>
+  </div>
+
+  {% for req in requests %}
+  <div class="rt-row">
+    <!-- Student -->
+    <div class="student-info">
+      <div class="s-av">
+        {% if req.student.profile_picture %}
+          <img src="{{ req.student.profile_picture.url }}" alt="">
+        {% else %}
+          {{ req.student.user.first_name|first|upper }}{{ req.student.user.last_name|first|upper }}
+        {% endif %}
+      </div>
+      <div>
+        <div class="s-name">{{ req.student.user.get_full_name|default:req.student.user.username }}</div>
+        <div class="s-roll">{{ req.student.roll_number }}</div>
+      </div>
+    </div>
+
+    <!-- Course -->
+    <div>
+      <div class="course-name">{{ req.course.title|truncatechars:30 }}</div>
+      <div class="course-dept">{{ req.course.get_department_display }}</div>
+    </div>
+
+    <!-- Dept tag -->
+    <div>
+      {% if req.course.department %}
+      <span class="dept-tag">{{ req.course.department }}</span>
+      {% else %}—{% endif %}
+    </div>
+
+    <!-- Date -->
+    <div class="date-text">{{ req.requested_at|date:"d M Y" }}</div>
+
+    <!-- Actions -->
+    <div class="action-btns">
+      {% if req.status == 'pending' %}
+        <form method="post" action="{% url 'approve_request' req.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="approve-btn"><i class="fas fa-check"></i> Approve</button>
+        </form>
+        <button class="reject-btn" onclick="openRejectModal({{ req.pk }}, '{{ req.student.user.get_full_name|default:req.student.user.username }}', '{{ req.course.title|truncatechars:25 }}')">
+          <i class="fas fa-times"></i> Reject
+        </button>
+      {% else %}
+        <span class="status-badge status-{{ req.status }}">
+          {% if req.status == 'approved' %}<i class="fas fa-check-circle"></i>{% else %}<i class="fas fa-times-circle"></i>{% endif %}
+          {{ req.get_status_display }}
+        </span>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p style="font-size:15px;margin-bottom:6px;">No {{ status_filter }} requests.</p>
+    <p style="font-size:13px;">Nothing to review right now.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Reject Modal -->
+<div class="modal-overlay" id="rejectModal">
+  <div class="modal">
+    <h3>Reject Enrollment Request</h3>
+    <p id="rejectModalDesc">Rejecting request</p>
+    <form method="post" id="rejectForm">
+      {% csrf_token %}
+      <textarea name="reason" placeholder="Reason for rejection (optional)..."></textarea>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel" onclick="closeRejectModal()">Cancel</button>
+        <button type="submit" class="modal-reject"><i class="fas fa-times"></i> Reject</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openRejectModal(pk, studentName, courseTitle) {
+    document.getElementById('rejectModal').classList.add('open');
+    document.getElementById('rejectModalDesc').textContent = `Rejecting ${studentName}'s request for "${courseTitle}"`;
+    document.getElementById('rejectForm').action = `/principal/requests/${pk}/reject/`;
+  }
+  function closeRejectModal() {
+    document.getElementById('rejectModal').classList.remove('open');
+  }
+  document.getElementById('rejectModal').addEventListener('click', function(e) {
+    if (e.target === this) closeRejectModal();
+  });
+</script>
+{% endblock %}

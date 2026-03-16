@@ -6,44 +6,109 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 18px; animation: fadeUp 0.4s ease; }
   .id-card { background: white; border-radius: 18px; padding: 28px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); text-align: center; }
-  .id-av-wrap { position: relative; display: inline-block; margin-bottom: 14px; }
-  .id-av { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #E85D8A); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: white; margin: 0 auto; overflow: hidden; border: 3px solid #EEF0FE; }
+  .id-av { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #5B67F5, #E85D8A); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: white; margin: 0 auto 14px; overflow: hidden; border: 3px solid #EEF0FE; }
   .id-av img { width: 100%; height: 100%; object-fit: cover; }
   .id-name { font-size: 16px; font-weight: 700; color: #1A1D2E; margin-bottom: 3px; }
-  .id-role { display: inline-block; background: #EEF0FE; color: #5B67F5; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 18px; }
+  .id-role { display: inline-block; background: #EEF0FE; color: #5B67F5; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 6px; }
+  .id-dept { display: inline-flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #FDE8F1, #FBCFE8); color: #E85D8A; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .id-no-dept { display: inline-flex; align-items: center; gap: 5px; background: #F3F4F6; color: #9CA3AF; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
   .id-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F5F6FA; font-size: 13px; }
   .id-row:last-child { border-bottom: none; }
   .id-lbl { color: #9CA3AF; font-size: 12px; }
   .id-val { font-weight: 600; font-size: 13px; }
   .courses-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 14px; }
-  .ci { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px solid #F5F6FA; }
+  .ci { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px solid #F5F6FA; flex-wrap: wrap; overflow: hidden; }
   .ci:last-child { border-bottom: none; }
   .ci-ic { width: 34px; height: 34px; border-radius: 9px; background: #EEF0FE; display: flex; align-items: center; justify-content: center; color: #5B67F5; font-size: 13px; flex-shrink: 0; }
   .ci-title { font-size: 13px; font-weight: 600; }
   .ci-date { font-size: 11px; color: #9CA3AF; }
-  .edit-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-  .ec-title { font-size: 15px; font-weight: 700; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #F5F6FA; }
+  .ci-dept { font-size: 10px; font-weight: 600; color: #E85D8A; background: #FDE8F1; padding: 2px 7px; border-radius: 10px; margin-left: auto; flex-shrink: 0; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dept-info { background: linear-gradient(135deg, #EEF0FE, #E8EAFF); border-radius: 12px; padding: 14px 16px; margin-top: 14px; display: flex; align-items: center; gap: 11px; }
+  .di-icon { width: 36px; height: 36px; border-radius: 10px; background: #5B67F5; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0; }
+  .di-title { font-size: 12px; font-weight: 700; color: #1A1D2E; }
+  .di-sub { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .no-dept-info { background: #F9FAFB; border: 1.5px dashed #E5E7EB; border-radius: 12px; padding: 14px 16px; margin-top: 14px; text-align: center; }
+  .no-dept-info p { font-size: 12px; color: #9CA3AF; margin-bottom: 6px; }
+  .no-dept-info a { font-size: 12px; font-weight: 600; color: #5B67F5; text-decoration: none; }
+
+  /* RIGHT COLUMN */
+  .right-col { display: flex; flex-direction: column; gap: 18px; }
+
+  /* Activity summary */
+  .activity-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .activity-card .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #F5F6FA; }
+  .card-title { font-size: 15px; font-weight: 700; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .stat-box { background: #F8F9FF; border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-box.green { background: #F0FDF4; }
+  .stat-box.pink { background: #FFF1F5; }
+  .stat-num { font-size: 24px; font-weight: 800; color: #1A1D2E; line-height: 1; margin-bottom: 4px; }
+  .stat-num.blue { color: #5B67F5; }
+  .stat-num.green { color: #10B981; }
+  .stat-num.pink { color: #E85D8A; }
+  .stat-lbl { font-size: 11px; color: #9CA3AF; font-weight: 600; }
+
+  /* Edit card */
+  .detail-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #F5F6FA; }
+  .edit-icon-btn { width: 34px; height: 34px; border-radius: 10px; background: #EEF0FE; color: #5B67F5; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.2s; }
+  .edit-icon-btn:hover { background: #5B67F5; color: white; }
+  .close-icon-btn { width: 34px; height: 34px; border-radius: 10px; background: #FEE2E2; color: #DC2626; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.2s; }
+  .close-icon-btn:hover { background: #DC2626; color: white; }
+  .edit-section { display: none; }
+  .edit-section.open { display: block; animation: fadeUp 0.25s ease; }
   .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 11px; font-weight: 700; color: #1A1D2E; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .form-control { width: 100%; padding: 10px 14px; background: #F8F9FF; border: 1.5px solid #EAECF0; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #1A1D2E; outline: none; transition: all 0.2s; }
+  .form-control:focus { border-color: #5B67F5; background: white; box-shadow: 0 0 0 3px rgba(91,103,245,0.08); }
+  .readonly-field { background: #F3F4F6; color: #6B7280; cursor: not-allowed; }
+  .field-hint { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
   .save-btn { display: inline-flex; align-items: center; gap: 7px; background: #5B67F5; color: white; padding: 11px 24px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 12px rgba(91,103,245,0.26); margin-top: 6px; }
   .save-btn:hover { background: #4C63D2; transform: translateY(-1px); }
+
+  /* Requests card */
+  .requests-card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .req-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F5F6FA; }
+  .req-item:last-child { border-bottom: none; }
+  .req-ic { width: 34px; height: 34px; border-radius: 9px; background: #F3F4F6; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .req-ic.pending { background: #FEF3C7; color: #92400E; }
+  .req-ic.approved { background: #D1FAE5; color: #065f46; }
+  .req-ic.rejected { background: #FEE2E2; color: #991B1B; }
+  .req-title { font-size: 13px; font-weight: 600; color: #1A1D2E; }
+  .req-date { font-size: 11px; color: #9CA3AF; }
+  .req-status { margin-left: auto; flex-shrink: 0; }
+  .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-pending { background: #FEF3C7; color: #92400E; }
+  .status-approved { background: #D1FAE5; color: #065f46; }
+  .status-rejected { background: #FEE2E2; color: #991B1B; }
+  .rejection-reason { font-size: 11px; color: #9CA3AF; margin-top: 2px; font-style: italic; }
+
   @media (max-width: 880px) { .profile-grid { grid-template-columns: 1fr; } }
 </style>
 {% endblock %}
 
 {% block content %}
-<div style="margin-bottom:20px;"><h2 style="font-size:20px;font-weight:700;">My Profile</h2><p style="font-size:13px;color:#6B7280;margin-top:3px;">Manage your account details</p></div>
+<div style="margin-bottom:20px;">
+  <h2 style="font-size:20px;font-weight:700;">My Profile</h2>
+  <p style="font-size:13px;color:#6B7280;margin-top:3px;">View and manage your account details</p>
+</div>
 
 <div class="profile-grid">
+  <!-- LEFT -->
   <div>
     <div class="id-card">
-      <div class="id-av-wrap">
-        <div class="id-av">
-          {% if student and student.profile_picture %}<img src="{{ student.profile_picture.url }}" alt="">
-          {% else %}{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper|default:request.user.username|first|upper }}{% endif %}
-        </div>
+      <div class="id-av">
+        {% if student and student.profile_picture %}<img src="{{ student.profile_picture.url }}" alt="">
+        {% else %}{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper|default:request.user.username|first|upper }}{% endif %}
       </div>
       <div class="id-name">{{ request.user.get_full_name|default:request.user.username }}</div>
       <div class="id-role">Student</div>
+      {% if student and student.department %}
+        <div><span class="id-dept"><i class="fas fa-building"></i> {{ student.get_department_display }}</span></div>
+      {% else %}
+        <div><span class="id-no-dept"><i class="fas fa-question-circle"></i> No Department</span></div>
+      {% endif %}
       {% if student %}
       <div class="id-row"><span class="id-lbl">Roll No.</span><span class="id-val">{{ student.roll_number|default:"—" }}</span></div>
       <div class="id-row"><span class="id-lbl">Year</span><span class="id-val">{{ student.year_of_admission|default:"—" }}</span></div>
@@ -52,36 +117,151 @@
       <div class="id-row"><span class="id-lbl">Joined</span><span class="id-val">{{ request.user.date_joined|date:"d M Y" }}</span></div>
       <div class="id-row"><span class="id-lbl">Enrolled</span><span class="id-val">{{ enrolled_count }} course{{ enrolled_count|pluralize }}</span></div>
     </div>
+
+    {% if student and student.department %}
+    <div class="dept-info">
+      <div class="di-icon"><i class="fas fa-graduation-cap"></i></div>
+      <div><div class="di-title">{{ student.get_department_display }}</div><div class="di-sub">Your department is set from your enrolled courses</div></div>
+    </div>
+    {% else %}
+    <div class="no-dept-info">
+      <p>Department is set automatically when you enroll in a course.</p>
+      <a href="{% url 'course_list' %}">Browse courses to get started →</a>
+    </div>
+    {% endif %}
+
     <div class="courses-card">
       <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Enrolled Courses</div>
       {% for enrollment in user_courses %}
       <div class="ci">
         <div class="ci-ic"><i class="fas fa-book"></i></div>
-        <div><div class="ci-title">{{ enrollment.course.title|truncatechars:28 }}</div><div class="ci-date">{{ enrollment.enrolled_at|date:"d M Y" }}</div></div>
+        <div style="flex:1;"><div class="ci-title">{{ enrollment.course.title|truncatechars:26 }}</div><div class="ci-date">{{ enrollment.enrolled_at|date:"d M Y" }}</div></div>
+        {% if enrollment.course.department %}<span class="ci-dept">{{ enrollment.course.get_department_display }}</span>{% endif %}
       </div>
       {% empty %}
       <div style="text-align:center;color:#9CA3AF;font-size:13px;padding:16px 0;">No courses yet.</div>
       {% endfor %}
     </div>
   </div>
-  <div class="edit-card">
-    <div class="ec-title">Edit Profile</div>
-    <form method="post" enctype="multipart/form-data" action="{% url 'student_profile' %}">
-      {% csrf_token %}
-      <div class="g2">
-        <div class="form-group"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" value="{{ request.user.first_name }}"></div>
-        <div class="form-group"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" value="{{ request.user.last_name }}"></div>
+
+  <!-- RIGHT -->
+  <div class="right-col">
+
+    <!-- Activity Summary -->
+    <div class="activity-card">
+      <div class="card-header">
+        <span class="card-title">Activity Summary</span>
+        <i class="fas fa-chart-bar" style="color:#9CA3AF;font-size:14px;"></i>
       </div>
-      <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ request.user.email }}"></div>
-      {% if student %}
-      <div class="form-group"><label class="form-label">Roll Number</label><input type="text" name="roll_number" class="form-control" value="{{ student.roll_number }}"></div>
-      <div class="g2">
-        <div class="form-group"><label class="form-label">Year of Admission</label><input type="number" name="year_of_admission" class="form-control" value="{{ student.year_of_admission }}" min="2000" max="2099"></div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-num blue">{{ enrolled_count }}</div>
+          <div class="stat-lbl">Enrolled</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-num green">{{ my_requests|length }}</div>
+          <div class="stat-lbl">Requests</div>
+        </div>
+        <div class="stat-box pink">
+          {% with pending_count=my_requests|length %}
+          <div class="stat-num pink">
+            {% for r in my_requests %}{% if r.status == 'pending' %}{% with x=forloop.counter %}{% endwith %}{% endif %}{% endfor %}
+            {{ my_requests|length }}
+          </div>
+          {% endwith %}
+          <div class="stat-lbl">Pending</div>
+        </div>
       </div>
-      {% endif %}
-      <div class="form-group"><label class="form-label">Profile Picture</label><input type="file" name="profile_picture" class="form-control" accept="image/*"></div>
-      <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Changes</button>
-    </form>
+      <a href="{% url 'course_list' %}" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#EEF0FE;color:#5B67F5;padding:10px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s;">
+        <i class="fas fa-book-open"></i> Browse Courses
+      </a>
+    </div>
+
+    <!-- Edit Profile -->
+    <div class="detail-card">
+      <div class="card-header">
+        <span class="card-title" id="cardTitle">Edit Profile</span>
+        <button class="edit-icon-btn" id="editBtn" onclick="openEdit()" title="Edit Profile"><i class="fas fa-pencil-alt"></i></button>
+        <button class="close-icon-btn" id="closeBtn" onclick="closeEdit()" title="Cancel" style="display:none;"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Collapsed state -->
+      <div id="collapsedState" style="text-align:center;padding:20px 0;color:#9CA3AF;">
+        <i class="fas fa-pencil-alt" style="font-size:28px;opacity:0.15;display:block;margin-bottom:10px;"></i>
+        <p style="font-size:13px;margin-bottom:12px;">Click the pencil icon to edit your profile details.</p>
+        <button onclick="openEdit()" style="background:#5B67F5;color:white;border:none;padding:9px 20px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">
+          <i class="fas fa-pencil-alt"></i> Edit Profile
+        </button>
+      </div>
+
+      <!-- Edit form (hidden by default) -->
+      <div class="edit-section" id="editSection">
+        <form method="post" enctype="multipart/form-data" action="{% url 'student_profile' %}">
+          {% csrf_token %}
+          <div class="g2">
+            <div class="form-group"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" value="{{ request.user.first_name }}"></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" value="{{ request.user.last_name }}"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ request.user.email }}"></div>
+          {% if student %}
+          <div class="g2">
+            <div class="form-group"><label class="form-label">Roll Number</label><input type="text" class="form-control readonly-field" value="{{ student.roll_number }}" readonly><p class="field-hint">Auto-generated.</p></div>
+            <div class="form-group"><label class="form-label">Year of Admission</label><input type="text" class="form-control readonly-field" value="{{ student.year_of_admission }}" readonly><p class="field-hint">Set on registration.</p></div>
+          </div>
+          <div class="form-group"><label class="form-label">Department</label><input type="text" class="form-control readonly-field" value="{% if student.department %}{{ student.get_department_display }}{% else %}Not set — enroll in a course{% endif %}" readonly><p class="field-hint">Auto-set on first enrollment.</p></div>
+          {% endif %}
+          <div class="form-group"><label class="form-label">Profile Picture</label><input type="file" name="profile_picture" class="form-control" accept="image/*"></div>
+          <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Enrollment Requests -->
+    <div class="requests-card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:14px;"><i class="fas fa-paper-plane" style="color:#5B67F5;margin-right:6px;"></i> Enrollment Requests</div>
+      {% for req in my_requests %}
+      <div class="req-item">
+        <div class="req-ic {{ req.status }}">
+          {% if req.status == 'pending' %}<i class="fas fa-clock"></i>
+          {% elif req.status == 'approved' %}<i class="fas fa-check"></i>
+          {% else %}<i class="fas fa-times"></i>{% endif %}
+        </div>
+        <div style="flex:1;">
+          <div class="req-title">{{ req.course.title|truncatechars:30 }}</div>
+          <div class="req-date">{{ req.requested_at|date:"d M Y" }}</div>
+          {% if req.status == 'rejected' and req.rejection_reason %}<div class="rejection-reason">Reason: {{ req.rejection_reason }}</div>{% endif %}
+        </div>
+        <div class="req-status">
+          <span class="status-badge status-{{ req.status }}">
+            {% if req.status == 'pending' %}<i class="fas fa-clock"></i>
+            {% elif req.status == 'approved' %}<i class="fas fa-check-circle"></i>
+            {% else %}<i class="fas fa-times-circle"></i>{% endif %}
+            {{ req.get_status_display }}
+          </span>
+        </div>
+      </div>
+      {% empty %}
+      <div style="text-align:center;color:#9CA3AF;font-size:13px;padding:16px 0;">No enrollment requests yet.</div>
+      {% endfor %}
+    </div>
+
   </div>
 </div>
+
+<script>
+  function openEdit() {
+    document.getElementById('collapsedState').style.display = 'none';
+    document.getElementById('editSection').classList.add('open');
+    document.getElementById('editBtn').style.display = 'none';
+    document.getElementById('closeBtn').style.display = 'flex';
+    document.getElementById('cardTitle').textContent = 'Edit Profile';
+  }
+  function closeEdit() {
+    document.getElementById('editSection').classList.remove('open');
+    document.getElementById('collapsedState').style.display = 'block';
+    document.getElementById('closeBtn').style.display = 'none';
+    document.getElementById('editBtn').style.display = 'flex';
+    document.getElementById('cardTitle').textContent = 'Edit Profile';
+  }
+</script>
 {% endblock %}

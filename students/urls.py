@@ -32,5 +32,5 @@ urlpatterns = [
     path('student/profile/',   views.student_profile,   name='student_profile'),
     path('student/courses/',   views.course_list,        name='course_list'),
     path('student/courses/<int:pk>/',        views.course_detail,  name='course_detail'),
-    path('student/courses/<int:pk>/enroll/', views.enroll_course,  name='enroll_course'),
+    path('student/courses/<int:pk>/request/', views.request_enrollment, name='request_enrollment'),
 ]

@@ -80,22 +80,17 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.roll_number}"
 
-
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    department = models.CharField(
-        max_length=10,
-        choices=DEPARTMENT_CHOICES,
-        blank=True,
-        null=True
-    )
+    department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES, blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)  
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.title} ({self.department})"
+    def is_free(self):
+        return self.price == 0
 
 
 class Enrollment(models.Model):
@@ -115,3 +110,24 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student} enrolled in {self.course}"
+    
+class EnrollmentRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    requested_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    rejection_reason = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('student', 'course')
+
+    def __str__(self):
+        return f"{self.student} → {self.course} ({self.status})"
+    
+

@@ -123,6 +123,7 @@ USE_TZ = True
 import os
 
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR,'templates')]
+TEMPLATES[0]['OPTIONS']['context_processors'].append('principal.context_processors.pending_requests')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
@@ -147,5 +148,12 @@ MESSAGE_TAGS = {
 }
 
 # Email (console backend for development - prints to terminal)
-EMAIL_BACKEND    = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'Learnthru <noreply@learnthru.com>'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ishaaaaashh@gmail.com'
+EMAIL_HOST_PASSWORD = 'gnjs imnm zuro tyvf'  # Gmail App Password, NOT your Gmail password
+DEFAULT_FROM_EMAIL = 'Learnthru <ishaaaaashh@gmail.com>'
+
+

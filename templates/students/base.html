@@ -29,145 +29,51 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* LAYOUT */
-    .layout { display: grid; grid-template-columns: 220px 1fr 280px; min-height: 100vh; }
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
 
-    /* ─── SIDEBAR ─── */
+    /* SIDEBAR */
     .sidebar {
       background: var(--sidebar-bg);
       padding: 28px 0;
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       border-right: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
     }
     .sidebar-logo {
       display: flex; align-items: center; gap: 10px;
-      padding: 0 24px 28px;
-      text-decoration: none;
+      padding: 0 24px 28px; text-decoration: none;
     }
     .logo-mark {
       width: 34px; height: 34px;
       background: linear-gradient(135deg, #5B67F5, #E85D8A);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; color: white;
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; font-size: 16px; color: white;
     }
     .logo-name { font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
     .sidebar-nav { flex: 1; padding: 0 12px; }
     .nav-item {
       display: flex; align-items: center; gap: 12px;
-      padding: 11px 14px;
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      color: var(--text2);
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 2px;
-      transition: all 0.18s;
-      position: relative;
+      padding: 11px 14px; border-radius: var(--radius-sm);
+      text-decoration: none; color: var(--text2);
+      font-size: 14px; font-weight: 500; margin-bottom: 2px;
+      transition: all 0.18s; position: relative;
     }
     .nav-item i { width: 18px; font-size: 14px; text-align: center; }
     .nav-item:hover { background: var(--primary-light); color: var(--primary); }
     .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
     .nav-item.active::before {
-      content: '';
-      position: absolute; left: -12px; top: 20%; bottom: 20%;
+      content: ''; position: absolute; left: -12px; top: 20%; bottom: 20%;
       width: 3px; background: var(--primary); border-radius: 0 3px 3px 0;
     }
-    .sidebar-help {
-      margin: 16px 16px 0;
-      background: linear-gradient(135deg, #EEF0FE, #E8EAFF);
-      border-radius: var(--radius);
-      padding: 18px;
-      text-align: center;
-    }
-    .sh-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
-    .sh-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .sh-sub { font-size: 11px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
-    .sh-btn {
-      display: block; background: var(--primary); color: white;
-      border-radius: 8px; padding: 8px; font-size: 12px; font-weight: 600;
-      text-decoration: none; transition: opacity 0.2s;
-    }
-    .sh-btn:hover { opacity: 0.88; }
 
-    /* ─── MAIN ─── */
+    /* MAIN */
     .main { overflow-y: auto; }
     .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 28px 0;
-      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 20px 28px 0; margin-bottom: 20px;
     }
-    .search-box {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 50px; padding: 10px 18px;
-      width: 280px; transition: all 0.2s;
-    }
-    .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(91,103,245,0.08); }
-    .search-box i { color: var(--text3); font-size: 13px; }
-    .search-box input { border: none; outline: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); width: 100%; }
-    .search-box input::placeholder { color: var(--text3); }
     .topbar-date { font-size: 13px; color: var(--text2); font-weight: 500; }
-
     .content { padding: 0 28px 32px; }
-
-    /* ─── RIGHT PANEL ─── */
-    .right-panel {
-      background: var(--card);
-      border-left: 1px solid var(--border);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    .profile-widget { text-align: center; }
-    .pw-avatar {
-      width: 72px; height: 72px; border-radius: 50%;
-      margin: 0 auto 12px;
-      background: linear-gradient(135deg, var(--primary), var(--pink));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 700; color: white;
-      overflow: hidden;
-    }
-    .pw-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .pw-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-    .pw-role { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
-    .pw-btn {
-      display: inline-block; background: var(--primary); color: white;
-      border-radius: 20px; padding: 7px 20px; font-size: 12px; font-weight: 600;
-      text-decoration: none; transition: all 0.2s;
-    }
-    .pw-btn:hover { background: var(--indigo); }
-
-    /* CALENDAR */
-    .calendar-widget {}
-    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .cal-month { font-size: 13px; font-weight: 700; }
-    .cal-nav { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text2); transition: all 0.2s; }
-    .cal-nav:hover { background: var(--primary); color: white; border-color: var(--primary); }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; text-align: center; }
-    .cal-day-header { font-size: 10px; font-weight: 600; color: var(--text3); padding: 4px 0; }
-    .cal-day { font-size: 11px; font-weight: 500; color: var(--text2); padding: 5px 2px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
-    .cal-day:hover { background: var(--primary-light); color: var(--primary); }
-    .cal-day.today { background: var(--primary); color: white; font-weight: 700; border-radius: 50%; }
-    .cal-day.other-month { color: var(--text3); opacity: 0.4; }
-
-    /* REMINDERS */
-    .section-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-    .reminder-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
-    .reminder-item:last-child { border-bottom: none; }
-    .reminder-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
-    .reminder-text { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
-    .reminder-date { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
     /* MESSAGES */
     .msg-wrap { position: fixed; top: 16px; right: 16px; z-index: 999; display: flex; flex-direction: column; gap: 7px; min-width: 270px; }
@@ -179,14 +85,12 @@
     .msg-warning { background: #FEF3C7; color: #92400E; }
     .msg-close { margin-left: auto; background: none; border: none; cursor: pointer; opacity: 0.6; font-size: 14px; color: inherit; }
 
-    /* SHARED CARD */
+    /* SHARED */
     .card { background: var(--card); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .section-header h3 { font-size: 15px; font-weight: 700; }
     .view-all { font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
     .view-all:hover { text-decoration: underline; }
-
-    /* FORM COMPONENTS (used in sub-pages) */
     .form-group { margin-bottom: 14px; }
     .form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
     .form-control { width: 100%; padding: 10px 14px; background: #F8F9FF; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: all 0.2s; }
@@ -199,7 +103,6 @@
     .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
     .btn-danger { background: #FEE2E2; color: #991B1B; }
     .btn-danger:hover { background: #FCA5A5; }
-
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
     td { padding: 13px 14px; border-bottom: 1px solid #F5F6FA; color: var(--text); vertical-align: middle; }
@@ -236,7 +139,6 @@
 {% endif %}
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <a href="{% url 'student_dashboard' %}" class="sidebar-logo">
       <div class="logo-mark"><i class="fas fa-graduation-cap"></i></div>
@@ -256,111 +158,19 @@
         <i class="fas fa-sign-out-alt"></i> Logout
       </a>
     </nav>
-    <div class="sidebar-help">
-      <span class="sh-emoji">🎧</span>
-      <div class="sh-title">Need help?</div>
-      <div class="sh-sub">Do you have any problem while using the Learnthru?</div>
-      <a href="#" class="sh-btn">Get Support</a>
-    </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
-      <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Search">
-      </div>
       <span class="topbar-date" id="tbDate"></span>
     </div>
     <div class="content">{% block content %}{% endblock %}</div>
   </div>
-
-  <!-- RIGHT PANEL -->
-  <aside class="right-panel">
-    <!-- Profile Widget -->
-    <div class="profile-widget">
-      <div class="pw-avatar">
-        {% if request.user.student.profile_picture %}
-          <img src="{{ request.user.student.profile_picture.url }}" alt="">
-        {% else %}
-          {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper|default:request.user.username|first|upper }}
-        {% endif %}
-      </div>
-      <div class="pw-name">{{ request.user.get_full_name|default:request.user.username }}</div>
-      <div class="pw-role">Student</div>
-      <a href="{% url 'student_profile' %}" class="pw-btn">Profile</a>
-    </div>
-
-    <!-- Calendar -->
-    <div class="calendar-widget">
-      <div class="cal-header">
-        <button class="cal-nav" id="calPrev"><i class="fas fa-chevron-left"></i></button>
-        <span class="cal-month" id="calMonth"></span>
-        <button class="cal-nav" id="calNext"><i class="fas fa-chevron-right"></i></button>
-      </div>
-      <div class="cal-grid" id="calGrid"></div>
-    </div>
-
-    <!-- Reminders -->
-    <div>
-      <div class="section-title">Reminders</div>
-      {% block reminders %}
-      <div class="reminder-item">
-        <div class="reminder-icon"><i class="fas fa-bell"></i></div>
-        <div>
-          <div class="reminder-text">Check your enrolled courses</div>
-          <div class="reminder-date">Stay up to date</div>
-        </div>
-      </div>
-      <div class="reminder-item">
-        <div class="reminder-icon"><i class="fas fa-book"></i></div>
-        <div>
-          <div class="reminder-text">Explore new subjects</div>
-          <div class="reminder-date">Browse the course catalog</div>
-        </div>
-      </div>
-      {% endblock %}
-    </div>
-  </aside>
 </div>
 
 <script>
-  // Date
   const now = new Date();
   document.getElementById('tbDate').textContent = now.toLocaleDateString('en-US', {day:'numeric',month:'long',year:'numeric',weekday:'long'});
-
-  // Calendar
-  let calYear = now.getFullYear(), calMonth = now.getMonth();
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  function renderCal() {
-    const grid = document.getElementById('calGrid');
-    const monthName = new Date(calYear, calMonth, 1).toLocaleDateString('en-US', {month:'long', year:'numeric'});
-    document.getElementById('calMonth').textContent = monthName;
-    grid.innerHTML = '';
-    days.forEach(d => { const h = document.createElement('div'); h.className = 'cal-day-header'; h.textContent = d; grid.appendChild(h); });
-    const first = new Date(calYear, calMonth, 1).getDay();
-    const offset = (first === 0 ? 6 : first - 1);
-    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-    const prevDays = new Date(calYear, calMonth, 0).getDate();
-    for (let i = offset - 1; i >= 0; i--) {
-      const d = document.createElement('div'); d.className = 'cal-day other-month'; d.textContent = prevDays - i; grid.appendChild(d);
-    }
-    for (let i = 1; i <= daysInMonth; i++) {
-      const d = document.createElement('div'); d.className = 'cal-day'; d.textContent = i;
-      if (i === now.getDate() && calMonth === now.getMonth() && calYear === now.getFullYear()) d.classList.add('today');
-      grid.appendChild(d);
-    }
-    const remaining = 42 - offset - daysInMonth;
-    for (let i = 1; i <= remaining; i++) {
-      const d = document.createElement('div'); d.className = 'cal-day other-month'; d.textContent = i; grid.appendChild(d);
-    }
-  }
-  document.getElementById('calPrev').onclick = () => { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); };
-  document.getElementById('calNext').onclick = () => { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCal(); };
-  renderCal();
-
-  // Auto-dismiss messages
   setTimeout(() => document.querySelectorAll('.msg').forEach(e => { e.style.transition = 'opacity 0.4s'; e.style.opacity = '0'; setTimeout(() => e.remove(), 400); }), 4500);
 </script>
 {% block extra_js %}{% endblock %}

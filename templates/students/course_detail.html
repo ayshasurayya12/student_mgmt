@@ -85,22 +85,65 @@
         <p>You are enrolled in this course!</p>
         <span style="font-size:12px;color:#9CA3AF;">Keep up the great work.</span>
       </div>
-      {% else %}
-      <div class="ec-price">
-        <span class="big">Free</span>
-        <span class="sub">Enroll and start learning today</span>
-      </div>
-      <div class="ec-body">
-        <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
-        <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
-        <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
-        <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
-        <form method="post" action="{% url 'enroll_course' course.pk %}">
-          {% csrf_token %}
-          <button type="submit" class="btn-enroll"><i class="fas fa-graduation-cap"></i> Enroll Now</button>
-        </form>
-      </div>
-      {% endif %}
+      {% elif is_locked %}
+<div class="ec-price">
+  <span class="big" style="font-size:20px;color:#9CA3AF;">🔒 Locked</span>
+  <span class="sub">This course belongs to a different department</span>
+</div>
+<div class="ec-body">
+  <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
+  <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
+  <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
+  <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
+  <button class="btn-enroll" disabled style="background:linear-gradient(135deg,#9CA3AF,#D1D5DB);cursor:not-allowed;box-shadow:none;margin-top:14px;">
+    <i class="fas fa-lock"></i> Other Department
+  </button>
+</div>
+{% elif request_status == 'pending' %}
+<div class="ec-body">
+  <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
+  <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
+  <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
+  <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
+  <button class="btn-enroll" disabled style="background:linear-gradient(135deg,#F59E0B,#FCD34D);cursor:not-allowed;box-shadow:none;margin-top:14px;">
+    <i class="fas fa-clock"></i> Request Pending
+  </button>
+</div>
+{% elif request_status == 'rejected' %}
+<div class="ec-price">
+  {% if course.is_free %}
+    <span class="big" style="color:#10B981;">Free</span>
+    <span class="sub">No fees — request enrollment to get started</span>
+  {% else %}
+    <span class="big">₹{{ course.price }}</span>
+    <span class="sub">One-time course fee</span>
+  {% endif %}
+</div>
+<div class="ec-body">
+  <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
+  <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
+  <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
+  <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
+  <button class="btn-enroll" disabled style="background:linear-gradient(135deg,#EF4444,#FCA5A5);cursor:not-allowed;box-shadow:none;margin-top:14px;">
+    <i class="fas fa-times-circle"></i> Request Rejected
+  </button>
+</div>
+{% else %}
+<div class="ec-price">
+  <span class="big">Free</span>
+  <span class="sub">Request enrollment to get started</span>
+</div>
+<div class="ec-body">
+  <div class="feat"><i class="fas fa-infinity"></i> Lifetime access</div>
+  <div class="feat"><i class="fas fa-mobile-alt"></i> Access on any device</div>
+  <div class="feat"><i class="fas fa-certificate"></i> Certificate on completion</div>
+  <div class="feat"><i class="fas fa-users"></i> Join {{ course.enrollment_set.count }} learners</div>
+  <form method="post" action="{% url 'request_enrollment' course.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn-enroll"><i class="fas fa-paper-plane"></i> Request Enrollment</button>
+  </form>
+</div>
+{% endif %}
     </div>
   </div>
 </div>
