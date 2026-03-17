@@ -3,6 +3,16 @@
 
 {% block extra_css %}
 <style>
+
+@media(max-width:1100px){ .classes-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:600px){
+  .classes-grid{ grid-template-columns:1fr; }
+  .welcome-banner{ flex-direction:column; gap:16px; text-align:center; }
+  .wb-text p{ max-width:100%; }
+  .books-illustration{ display:none; }
+  table{ font-size:11px; }
+  th,td{ padding:8px 6px; }
+}
 @keyframes fadeUp {
   from {opacity:0; transform:translateY(12px);}
   to {opacity:1; transform:translateY(0);}

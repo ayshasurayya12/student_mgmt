@@ -62,8 +62,27 @@ def register_view(request):
         )
         user.profile.role = 'student'
         user.profile.save()
-        Student.objects.create(user=user)
+        student = Student.objects.create(user=user)
         messages.success(request, 'Account created! Please log in.')
+
+        # Send welcome email
+        if email:
+            send_email(
+                to_email=email,
+                subject='Welcome to Learnthru!',
+                message=f"""Hi {first_name or username},
+
+Welcome to Learnthru! Your account has been created successfully.
+
+Your login details:
+Username: {username}
+Roll Number: {student.roll_number}
+
+You can now log in and browse available courses. Once you find a course you like, request enrollment and the principal will review your request.
+
+— Learnthru Team"""
+            )
+
         return redirect('login')
     return render(request, 'registration/register.html')
 
@@ -124,11 +143,16 @@ def student_profile(request):
         student=student
     ).select_related('course').order_by('-requested_at')
 
+    pending_count = my_requests.filter(status='pending').count()
+    approved_count = my_requests.filter(status='approved').count()
+
     return render(request, 'students/profile.html', {
         'student': student,
         'enrolled_count': enrolled_count,
         'user_courses': user_courses,
         'my_requests': my_requests,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
     })
 
 

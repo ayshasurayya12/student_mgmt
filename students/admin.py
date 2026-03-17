@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Profile, Student, Principal, Course, Enrollment, DEPARTMENT_CHOICES
+from .models import Profile, Student,  Course, Enrollment, DEPARTMENT_CHOICES
+
 
 
 @admin.register(Profile)
@@ -16,10 +17,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_filter = ('department', 'year_of_admission')
 
 
-@admin.register(Principal)
-class PrincipalAdmin(admin.ModelAdmin):
-    list_display = ('user', 'employee_id', 'designation', 'phone')
-    search_fields = ('user__username', 'employee_id')
+
 
 
 @admin.register(Course)

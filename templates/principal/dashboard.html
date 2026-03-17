@@ -4,6 +4,12 @@
 
 {% block extra_css %}
 <style>
+  @media(max-width:1000px){ .stats-row{ grid-template-columns:repeat(2,1fr); } .bottom-grid{ grid-template-columns:1fr; } }
+@media(max-width:600px){
+  .stats-row{ grid-template-columns:1fr; }
+  .welcome-banner{ flex-direction:column; }
+  .wb-illustration{ display:none; }
+}
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   /* WELCOME */
   .welcome-banner { background: white; border-radius: 18px; padding: 26px 28px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.05); overflow: hidden; position: relative; animation: fadeUp 0.4s ease; }

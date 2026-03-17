@@ -5,7 +5,8 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
-from students.models import Principal, Student, Course, Enrollment, Profile
+from students.models import  Student, Course, Enrollment, Profile
+from principal.models import Principal
 from students.models import DEPARTMENT_CHOICES
 from students.models import Enrollment, EnrollmentRequest
 import datetime
@@ -24,7 +25,7 @@ def send_email(to_email, subject, message):
         pass
 
 
-# ── PRINCIPAL ONLY DECORATOR ──────────────────────────────────────────
+
 
 def principal_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -39,7 +40,7 @@ def principal_required(view_func):
     return wrapper
 
 
-# ── PRINCIPAL DASHBOARD ───────────────────────────────────────────────
+
 
 @principal_required
 def principal_dashboard(request):
@@ -54,7 +55,7 @@ def principal_dashboard(request):
     })
 
 
-# ── PRINCIPAL PROFILE ─────────────────────────────────────────────────
+
 
 @principal_required
 def principal_profile(request):
@@ -78,15 +79,10 @@ def principal_profile(request):
 
     return render(request, 'principal/profile.html', {
         'principal': principal,
-        'total_students': Student.objects.count(),
-        'total_courses': Course.objects.count(),
-        'pending_requests_list': EnrollmentRequest.objects.filter(
-            status='pending'
-        ).select_related('student__user', 'course').order_by('-requested_at')[:5],
     })
 
 
-# ── STUDENT MANAGEMENT ────────────────────────────────────────────────
+
 
 @principal_required
 def student_list(request):
@@ -166,7 +162,7 @@ def student_delete(request, pk):
     return redirect('principal_student_list')
 
 
-# ── COURSE MANAGEMENT ─────────────────────────────────────────────────
+
 
 @principal_required
 def course_list(request):
@@ -239,7 +235,7 @@ def course_delete(request, pk):
     return redirect('principal_course_list')
 
 
-# ── ENROLLMENT REQUESTS ───────────────────────────────────────────────
+
 
 @principal_required
 def enrollment_requests(request):

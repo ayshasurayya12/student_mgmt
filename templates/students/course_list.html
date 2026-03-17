@@ -3,6 +3,14 @@
 
 {% block extra_css %}
 <style>
+  @media(max-width:1000px){ .courses-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px){
+  .courses-grid{ grid-template-columns:1fr; }
+  .toolbar{ flex-wrap:wrap;}
+  .my-dept-bar{ flex-wrap:wrap; }
+  .dept-tabs{ gap:6px; }
+  .dept-tab{ padding:6px 12px; font-size:11px; }
+}
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   .page-hero {
     background: white; border-radius: 18px; padding: 22px 26px;
@@ -145,7 +153,7 @@
 {% block content %}
 
 <!-- Page Hero -->
-<div class="page-hero">
+<div class="page-hero ">
   <div class="ph-left">
     <h2>Course Catalog</h2>
     <p>Explore and enroll in courses that match your goals</p>
@@ -166,7 +174,7 @@
 {% endif %}
 
 <!-- Search -->
-<form method="get" class="toolbar">
+<form method="get" class="toolbar ">
   <div class="search-wrap">
     <i class="fas fa-search"></i>
     <input type="text" name="q" placeholder="Search courses..." value="{{ request.GET.q|default:'' }}">

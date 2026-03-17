@@ -3,6 +3,12 @@
 {% block page_title %}Students{% endblock %}
 {% block extra_css %}
 <style>
+  @media(max-width:1000px){ .cg{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:600px){
+  .cg{ grid-template-columns:1fr; }
+  .toolbar{ flex-direction:column; gap:10px; align-items:flex-start; }
+  .dept-tabs{ gap:6px; }
+}
   @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
   .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;animation:fadeUp 0.4s ease;}
   .toolbar h2{font-size:18px;font-weight:700;}
